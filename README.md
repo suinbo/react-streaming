@@ -1,4 +1,4 @@
-# React Streaming Server
+# Video Streaming Server
 
 ### Environment
 
