@@ -4,7 +4,7 @@ const path = require("path")
 const url = require("url")
 const fs = require("fs")
 
-/** MP4 파일 스트리밍 위한 라우터 */
+/** MP4 파일 스트리밍*/
 router.get("/*", (req, res) => {
     const { pathname } = url.parse(req.url, true)
     const filename = path.basename(pathname) // URL에서 파일 이름 추출
@@ -25,7 +25,7 @@ router.get("/*", (req, res) => {
         // range 헤더 파싱
         const parts = range.replace(/bytes=/, "").split("-")
 
-        // 재생 구간 설정
+        // 재생 구간 설정(파일 일부)
         const start = parseInt(parts[0], 10)
         const _end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1
         const end = Math.min(_end, start + MAX_CHUNK_SIZE - 1)
@@ -37,11 +37,12 @@ router.get("/*", (req, res) => {
             "Content-Length": fileSize - 1,
         }
         res.writeHead(206, header) //
-        const readStream = fs.createReadStream(filepath, { start, end })
-        readStream.pipe(res)
+        const readStream = fs.createReadStream(filepath, { start, end }) // 업로드된 파일에 대해 스트림 생성
+        readStream.pipe(res) // 파이프로 연결
     }
 })
 
+/** MP4 파일 업로드 */
 router.post("/", (req, res) => {
     const form = new multiparty.Form()
     form.on("error", err => res.status(500).end())

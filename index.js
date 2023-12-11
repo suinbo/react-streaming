@@ -46,6 +46,6 @@ app.post("/upload", upload.single("video"), (req, res) => {
     res.send("File uploaded!")
 })
 
-app.listen(PORT, function () {
+app.listen(PORT, () => {
     console.log(`running media server on ${PORT}`)
 })
